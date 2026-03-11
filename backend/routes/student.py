@@ -16,10 +16,7 @@ from backend.helpers import student_required, allowed_file
 student_bp = Blueprint('student', __name__)
 
 
-# ==================================================================
 #  PAGE ROUTES
-# ==================================================================
-
 @student_bp.route('/student/dashboard')
 @student_required
 def student_dashboard():
@@ -56,12 +53,9 @@ def student_search():
     return render_template('student/search.html')
 
 
-# ==================================================================
-#  API ROUTES — JSON data for Vue.js frontend
-# ==================================================================
+#  API ROUTES 
 
-# --- Student info ---
-
+#  Student info
 @student_bp.route('/api/student/info')
 @student_required
 def api_student_info():
@@ -70,7 +64,7 @@ def api_student_info():
     my_apps     = Application.query.filter_by(student_id=student.id).count()
     selected    = Application.query.filter_by(student_id=student.id, status='selected').count()
 
-    # Upcoming interviews (interview date in future with status interview/shortlisted)
+    # Upcoming interviews
     upcoming = Application.query.filter(
         Application.student_id == student.id,
         Application.interview_date != None,
@@ -101,8 +95,7 @@ def api_student_info():
     })
 
 
-# --- Profile update (supports both JSON and form-data for file upload) ---
-
+# Profile update
 @student_bp.route('/api/student/profile', methods=['PUT'])
 @student_required
 def api_update_student_profile():
@@ -145,8 +138,7 @@ def api_update_student_profile():
     return jsonify({'success': True, 'message': 'Profile updated', 'resume': student.resume})
 
 
-# --- Browse drives (paginated, searchable, with eligibility check) ---
-
+# Browse drives 
 @student_bp.route('/api/student/drives')
 @student_required
 @cache.cached(timeout=30, query_string=True, key_prefix='student_drives')
@@ -210,7 +202,7 @@ def api_student_drives():
     })
 
 
-# --- Apply to a drive (with eligibility checks) ---
+# Apply to a drive 
 
 @student_bp.route('/api/student/apply/<int:id>', methods=['POST'])
 @student_required
@@ -248,8 +240,7 @@ def api_apply_drive(id):
     return jsonify({'success': True, 'message': 'Applied successfully!'})
 
 
-# --- My applications ---
-
+# My applications
 @student_bp.route('/api/student/applications')
 @student_required
 @cache.cached(timeout=30, query_string=True, key_prefix='student_applications')
@@ -270,7 +261,7 @@ def api_student_applications():
     return jsonify(result)
 
 
-# --- Placement history (selected/rejected/placed results) ---
+# Placement history 
 
 @student_bp.route('/api/student/history')
 @student_required
@@ -293,8 +284,7 @@ def api_student_history():
     return jsonify(result)
 
 
-# --- Offer letter / Placement confirmation download (HTML) ---
-
+# Offer letter 
 @student_bp.route('/api/student/offer-letter/<int:app_id>')
 @student_required
 def api_offer_letter(app_id):
@@ -371,7 +361,7 @@ body {{ font-family: 'Georgia', serif; margin: 40px; color: #333; }}
     return response
 
 
-# --- Search drives and companies ---
+# Search drives and companies 
 
 @student_bp.route('/api/student/search')
 @student_required
@@ -417,7 +407,7 @@ def api_student_search():
         })
 
 
-# --- CSV Export (async with Celery or sync fallback) ---
+#  CSV Export (async with Celery or sync fallback) 
 
 @student_bp.route('/api/student/export-csv', methods=['POST'])
 @student_required

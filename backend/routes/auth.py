@@ -1,7 +1,3 @@
-"""
-Authentication routes — login, logout, registration, file serving.
-"""
-
 import os
 from flask import Blueprint, render_template, redirect, url_for, request, flash, \
     send_from_directory, current_app
@@ -16,10 +12,6 @@ from backend.helpers import allowed_file
 auth_bp = Blueprint('auth', __name__)
 
 
-# ------------------------------------------------------------------
-#  Home page — redirects logged-in users to their dashboard
-# ------------------------------------------------------------------
-
 @auth_bp.route('/')
 def home():
     if current_user.is_authenticated:
@@ -32,10 +24,7 @@ def home():
     return render_template('index.html')
 
 
-# ------------------------------------------------------------------
 #  Login
-# ------------------------------------------------------------------
-
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -76,10 +65,7 @@ def login():
     return render_template('login.html')
 
 
-# ------------------------------------------------------------------
 #  Logout
-# ------------------------------------------------------------------
-
 @auth_bp.route('/logout')
 @login_required
 def logout():
@@ -88,10 +74,7 @@ def logout():
     return redirect(url_for('auth.login'))
 
 
-# ------------------------------------------------------------------
 #  Student Registration
-# ------------------------------------------------------------------
-
 @auth_bp.route('/register/student', methods=['GET', 'POST'])
 def register_student():
     if current_user.is_authenticated:
@@ -153,10 +136,8 @@ def register_student():
     return render_template('register_student.html')
 
 
-# ------------------------------------------------------------------
-#  Company Registration
-# ------------------------------------------------------------------
 
+#  Company Registration
 @auth_bp.route('/register/company', methods=['GET', 'POST'])
 def register_company():
     if current_user.is_authenticated:
@@ -182,7 +163,6 @@ def register_company():
             flash('Email already registered.', 'danger')
             return redirect(url_for('auth.register_company'))
 
-        # Create user + company profile (status=pending until admin approves)
         user = User(email=email, password=hash_password(pwd), role='company')
         cr = Role.query.filter_by(name='company').first()
         if cr:
@@ -203,10 +183,7 @@ def register_company():
     return render_template('register_company.html')
 
 
-# ------------------------------------------------------------------
 #  Serve uploaded files (resumes, CSV exports, etc.)
-# ------------------------------------------------------------------
-
 @auth_bp.route('/uploads/<filename>')
 @login_required
 def get_file(filename):

@@ -1,9 +1,3 @@
-"""
-Celery background tasks — email notifications, reminders, reports, CSV exports.
-These run asynchronously when Redis + Celery worker is available,
-or fall back to synchronous execution otherwise.
-"""
-
 import os
 import csv
 import threading
@@ -14,14 +8,11 @@ from backend.extensions import celery, mail
 from backend.models import db, User, Student, Company, PlacementDrive, Application
 
 
-# ------------------------------------------------------------------
 #  Email notification helper
-# ------------------------------------------------------------------
-
 def _send_notification(to, subject, body, is_html=False):
     """Send a notification via email (non-blocking) + always log to console."""
 
-    # Always print to console as a fallback
+
     print(f"\n{'=' * 50}")
     print(f"NOTIFICATION -> To: {to} | Subject: {subject}")
     print(f"{'=' * 50}\n")
@@ -65,9 +56,8 @@ def _send_notification(to, subject, body, is_html=False):
         print(f"  [EMAIL] Failed: {e}")
 
 
-# ------------------------------------------------------------------
+
 #  Task 1: Daily reminders — deadlines + upcoming interviews
-# ------------------------------------------------------------------
 
 @celery.task(name='backend.tasks.send_daily_reminders')
 def send_daily_reminders():
@@ -117,10 +107,7 @@ def send_daily_reminders():
     return f'Reminders sent to {count} students'
 
 
-# ------------------------------------------------------------------
 #  Task 2: Monthly placement report — sent to admin
-# ------------------------------------------------------------------
-
 @celery.task(name='backend.tasks.send_monthly_report')
 def send_monthly_report():
     """Generate a monthly HTML report and email it to the admin."""
@@ -135,7 +122,7 @@ def send_monthly_report():
     total_students  = Student.query.count()
     total_companies = Company.query.count()
 
-    # Build HTML email from template
+    
     html = render_template('email/monthly_report.html',
         month_year=now.strftime('%B %Y'),
         drives_count=drives_count,
@@ -158,9 +145,9 @@ def send_monthly_report():
     return 'Monthly report generated and sent'
 
 
-# ------------------------------------------------------------------
+
 #  Task 3: Export student's application history as CSV
-# ------------------------------------------------------------------
+
 
 @celery.task(name='backend.tasks.export_student_csv')
 def export_student_csv(student_id):
@@ -206,10 +193,8 @@ def export_student_csv(student_id):
     return filename
 
 
-# ------------------------------------------------------------------
-#  Task 4: Export company's application data as CSV
-# ------------------------------------------------------------------
 
+#  Task 4: Export company's application data as CSV
 @celery.task(name='backend.tasks.export_company_csv')
 def export_company_csv(company_id):
     """Create a CSV file of all applications across a company's drives."""

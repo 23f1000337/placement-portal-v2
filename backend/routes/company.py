@@ -1,8 +1,3 @@
-"""
-Company routes — dashboard, profile, drive CRUD, application management, CSV export.
-All routes require approved company role.
-"""
-
 import os
 import csv
 from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for, current_app
@@ -16,9 +11,7 @@ from backend.helpers import company_required
 company_bp = Blueprint('company', __name__)
 
 
-# ==================================================================
 #  PAGE ROUTES
-# ==================================================================
 
 @company_bp.route('/company/pending')
 @login_required
@@ -67,12 +60,10 @@ def view_applications(id):
     return render_template('company/applications.html', drive_id=id)
 
 
-# ==================================================================
-#  API ROUTES — JSON data for Vue.js frontend
-# ==================================================================
 
-# --- Company info ---
+#  API ROUTES 
 
+# Company info
 @company_bp.route('/api/company/info')
 @company_required
 @cache.cached(timeout=60, key_prefix='company_info')
@@ -93,8 +84,7 @@ def api_company_info():
     })
 
 
-# --- Profile update ---
-
+# Profile update
 @company_bp.route('/api/company/profile', methods=['PUT'])
 @company_required
 def api_update_company_profile():
@@ -114,8 +104,7 @@ def api_update_company_profile():
     return jsonify({'success': True, 'message': 'Profile updated'})
 
 
-# --- Drives: list, create, read, update, close, delete ---
-
+# Drives: list, create, read, update, close, delete
 @company_bp.route('/api/company/drives')
 @company_required
 @cache.cached(timeout=30, key_prefix='company_drives')
@@ -234,8 +223,7 @@ def api_delete_drive(id):
     return jsonify({'success': True, 'message': 'Drive deleted'})
 
 
-# --- Student detail (view student profile from application) ---
-
+# Student detail
 @company_bp.route('/api/company/student/<int:id>')
 @company_required
 def api_company_student_detail(id):
@@ -261,8 +249,7 @@ def api_company_student_detail(id):
     })
 
 
-# --- Applications: view all for a drive, update status ---
-
+# Applications: view all for a drive, update status 
 @company_bp.route('/api/company/drive/<int:id>/applications')
 @company_required
 @cache.cached(timeout=30, query_string=True, key_prefix='company_drive_apps')
@@ -317,8 +304,7 @@ def api_update_app_status(id):
     return jsonify({'success': True, 'message': 'Status updated to ' + new_status})
 
 
-# --- CSV Export ---
-
+# CSV Export 
 @company_bp.route('/api/company/export-csv', methods=['POST'])
 @company_required
 def api_company_export_csv():

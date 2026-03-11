@@ -4,7 +4,7 @@
 <div id="app">
     <h2><i class="bi bi-briefcase"></i> Placement Drives</h2>
 
-    <!-- search -->
+    
     <div class="row g-2 mb-4">
         <div class="col-md-8">
             <input v-model="query" type="text" class="form-control" placeholder="Search by title, company or skills..." @keyup.enter="fetchDrives">
@@ -38,7 +38,7 @@
                     <small>[[ d.description.substring(0, 150) ]][[ d.description.length > 150 ? '...' : '' ]]</small>
                 </p>
 
-                <!-- eligibility warning -->
+                
                 <div v-if="!d.eligible" class="alert alert-warning py-1 px-2 mb-2">
                     <small><i class="bi bi-exclamation-triangle"></i> Not eligible: [[ d.reasons.join(', ') ]]</small>
                 </div>
@@ -52,7 +52,7 @@
     </div>
     <p v-else class="text-muted">No open drives found.</p>
 
-    <!-- pagination -->
+    
     <nav v-if="pages > 1" class="mt-3">
         <ul class="pagination justify-content-center">
             <li class="page-item" :class="{disabled: page <= 1}">

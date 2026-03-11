@@ -1,8 +1,3 @@
-"""
-Admin routes — dashboard, manage companies/students/drives/applications, search.
-All routes require admin role.
-"""
-
 from flask import Blueprint, render_template, request, jsonify
 from flask_security import current_user
 
@@ -13,9 +8,8 @@ from backend.helpers import admin_required
 admin_bp = Blueprint('admin', __name__)
 
 
-# ==================================================================
+
 #  PAGE ROUTES — serve HTML templates
-# ==================================================================
 
 @admin_bp.route('/admin/dashboard')
 @admin_required
@@ -53,12 +47,11 @@ def admin_search():
     return render_template('admin/search.html')
 
 
-# ==================================================================
-#  API ROUTES — return JSON data for Vue.js frontend
-# ==================================================================
 
-# --- Dashboard stats (cached 60s) ---
+#  API ROUTES 
 
+
+# Dashboard stats
 @admin_bp.route('/api/admin/stats')
 @admin_required
 @cache.cached(timeout=60, key_prefix='admin_stats')
@@ -74,8 +67,7 @@ def api_admin_stats():
     })
 
 
-# --- Companies: list, approve, reject, blacklist, delete ---
-
+# Companies: list, approve, reject, blacklist, delete 
 @admin_bp.route('/api/admin/companies')
 @admin_required
 @cache.cached(timeout=30, query_string=True, key_prefix='admin_companies')
@@ -151,8 +143,7 @@ def api_delete_company(id):
     return jsonify({'success': True, 'message': 'Company deleted'})
 
 
-# --- Students: list, detail, blacklist, delete ---
-
+# Students: list, detail, blacklist, delete
 @admin_bp.route('/api/admin/student/<int:id>')
 @admin_required
 def api_admin_student_detail(id):
@@ -228,8 +219,7 @@ def api_delete_student(id):
     return jsonify({'success': True, 'message': 'Student deleted'})
 
 
-# --- Drives: list, approve, reject ---
-
+# Drives: list, approve, reject 
 @admin_bp.route('/api/admin/drives')
 @admin_required
 @cache.cached(timeout=30, query_string=True, key_prefix='admin_drives')
@@ -299,7 +289,7 @@ def api_delete_drive(id):
     return jsonify({'success': True, 'message': 'Drive deleted'})
 
 
-# --- Applications: list, update status, delete ---
+# Applications: list, update status, delete
 
 @admin_bp.route('/api/admin/applications')
 @admin_required
@@ -356,7 +346,7 @@ def api_delete_application(id):
     return jsonify({'success': True, 'message': 'Application deleted'})
 
 
-# --- Search: students (by name/roll/branch/phone) or companies (by name/industry) ---
+# Search: students (by name/roll/branch/phone) or companies (by name/industry)
 
 @admin_bp.route('/api/admin/search')
 @admin_required

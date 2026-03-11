@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<!-- navbar -->
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="{{ url_for('auth.home') }}">
@@ -58,7 +58,7 @@
     </div>
 </nav>
 
-<!-- flash messages -->
+
 <div class="container mt-3">
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -72,12 +72,13 @@
     {% endwith %}
 </div>
 
-<!-- page content -->
+
+
 <div class="container mt-2 mb-5">
     {% block content %}{% endblock %}
 </div>
 
-<!-- footer -->
+
 <footer class="bg-dark text-light text-center py-3 mt-5">
     <p class="mb-0">&copy; 2026 Placement Portal - Institute Placement Cell</p>
 </footer>

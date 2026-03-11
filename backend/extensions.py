@@ -1,20 +1,14 @@
-"""
-Flask extensions — initialized here, configured in app.py's create_app().
-"""
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_caching import Cache
 from flask_mail import Mail
 from celery import Celery
 from celery.schedules import crontab
 
-# Database
+
 db = SQLAlchemy()
 
-# Caching
 cache = Cache()
 
-# Email
 mail = Mail()
 
 # Celery (background tasks)

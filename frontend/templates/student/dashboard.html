@@ -10,7 +10,7 @@
         <h2><i class="bi bi-person"></i> Welcome, [[ info.student.name ]]</h2>
         <p class="text-muted">Student dashboard</p>
 
-        <!-- stats -->
+       
         <div class="row g-3 mb-4">
             <div class="col-md-3 col-6">
                 <div class="card text-center p-3 bg-primary text-white">
@@ -38,7 +38,7 @@
             </div>
         </div>
 
-        <!-- quick links -->
+        
         <div class="row g-3 mb-4">
             <div class="col-md-3"><a href="{{ url_for('student.browse_drives') }}" class="btn btn-outline-primary w-100">Browse Drives</a></div>
             <div class="col-md-3"><a href="{{ url_for('student.my_applications') }}" class="btn btn-outline-success w-100">My Applications</a></div>
@@ -54,7 +54,7 @@
             <strong>Congratulations!</strong> You have been selected in [[ info.selected ]] placement drive(s)!
         </div>
 
-        <!-- Upcoming Interviews -->
+        
         <div v-if="info.interviews && info.interviews.length" class="mb-4">
             <h4><i class="bi bi-calendar-event"></i> Upcoming Interviews</h4>
             <div class="table-responsive">

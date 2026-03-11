@@ -1,7 +1,3 @@
-"""
-Helper utilities — role-based access decorators and file validation.
-"""
-
 from functools import wraps
 from flask import redirect, url_for, flash
 from flask_security import login_required, current_user
@@ -16,9 +12,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-# ------------------------------------------------------------------
 #  Role-based access decorators
-# ------------------------------------------------------------------
 
 def admin_required(f):
     """Only allow users with role='admin'."""
