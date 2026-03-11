@@ -89,4 +89,4 @@ The app runs at **http://127.0.0.1:5000**
 | Company | greenfield@company.com | test123 |
 
 Seed data (5 students, 3 companies, 6 drives, 8 applications) is created automatically on first run.
->>>>>>> d59e6df (Milestone-0 PPA-V2 Setup)
+
