@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Company Dashboard{% endblock %}
+{% block content %}
+<div id="app">
+    <div v-if="loading" class="text-center py-5">
+        <div class="spinner-border text-primary"></div>
+    </div>
+
+    <div v-else>
+        <h2><i class="bi bi-building"></i> Welcome, [[ info.company.name ]]</h2>
+        <p class="text-muted">Company dashboard</p>
+
+        <!-- stats -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="card text-center p-3 bg-primary text-white">
+                    <h3>[[ info.total_drives ]]</h3>
+                    <small>Total Drives</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center p-3 bg-success text-white">
+                    <h3>[[ info.total_apps ]]</h3>
+                    <small>Total Applications</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center p-3 bg-info text-white">
+                    <h3>[[ info.company.status ]]</h3>
+                    <small>Account Status</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4>Your Placement Drives</h4>
+            <div>
+                <button @click="exportCSV" class="btn btn-outline-success me-2" :disabled="exporting">
+                    <i class="bi bi-download"></i> [[ exporting ? 'Exporting...' : 'Export CSV' ]]
+                </button>
+                <a v-if="exportFile" :href="'/uploads/' + exportFile" class="btn btn-success me-2" download>
+                    <i class="bi bi-file-earmark-arrow-down"></i> Download
+                </a>
+                <a href="{{ url_for('company.create_drive') }}" class="btn btn-primary">+ New Drive</a>
+            </div>
+        </div>
+
+        <table v-if="drives.length" class="table table-hover">
+            <thead>
+                <tr><th>Title</th><th>Location</th><th>Salary</th><th>Deadline</th><th>Status</th><th>Apps</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                <tr v-for="d in drives" :key="d.id">
+                    <td>[[ d.title ]]</td>
+                    <td>[[ d.location || '-' ]]</td>
+                    <td>[[ d.salary || '-' ]]</td>
+                    <td>[[ d.deadline || '-' ]]</td>
+                    <td><span :class="'badge bg-' + statusColor(d.status)">[[ d.status ]]</span></td>
+                    <td>[[ d.apps_count ]]</td>
+                    <td>
+                        <a :href="'/company/drive/' + d.id + '/applications'" class="btn btn-sm btn-info">View Apps</a>
+                        <a :href="'/company/drive/' + d.id + '/edit'" class="btn btn-sm btn-warning">Edit</a>
+                        <button v-if="d.status != 'closed'" @click="closeDrive(d.id)" class="btn btn-sm btn-secondary">Close</button>
+                        <button @click="deleteDrive(d.id)" class="btn btn-sm btn-outline-danger">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p v-else class="text-muted">No drives created yet. Click "+ New Drive" to get started.</p>
+    </div>
+</div>
+{% endblock %}
+
+{%- block scripts %}
+<script src="/frontend/components/CompanyDashboard.js"></script>
+{%- endblock %}

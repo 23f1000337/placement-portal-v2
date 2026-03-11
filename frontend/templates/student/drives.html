@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Browse Drives{% endblock %}
+{% block content %}
+<div id="app">
+    <h2><i class="bi bi-briefcase"></i> Placement Drives</h2>
+
+    <!-- search -->
+    <div class="row g-2 mb-4">
+        <div class="col-md-8">
+            <input v-model="query" type="text" class="form-control" placeholder="Search by title, company or skills..." @keyup.enter="fetchDrives">
+        </div>
+        <div class="col-md-2">
+            <button @click="fetchDrives" class="btn btn-primary w-100">Search</button>
+        </div>
+        <div class="col-md-2">
+            <button @click="query=''; fetchDrives()" class="btn btn-outline-secondary w-100">Clear</button>
+        </div>
+    </div>
+
+    <div v-if="loading" class="text-center py-4">
+        <div class="spinner-border text-primary"></div>
+    </div>
+
+    <div v-else-if="drives.length" class="row g-3">
+        <div v-for="d in drives" :key="d.id" class="col-md-6">
+            <div class="card p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h5 class="mb-1">[[ d.title ]]</h5>
+                    <span v-if="d.already_applied" class="badge bg-success">Applied</span>
+                </div>
+                <p class="text-muted mb-1">[[ d.company ]] | [[ d.location || 'N/A' ]]</p>
+                <p class="mb-1"><strong>Salary:</strong> [[ d.salary || 'N/A' ]]</p>
+                <p class="mb-1"><strong>Deadline:</strong> [[ d.deadline || 'N/A' ]]</p>
+                <p v-if="d.eligibility" class="mb-1"><small><strong>Eligibility:</strong> [[ d.eligibility ]]</small></p>
+                <p v-if="d.min_cgpa" class="mb-1"><small><strong>Min CGPA:</strong> [[ d.min_cgpa ]]</small></p>
+                <p v-if="d.eligible_branches" class="mb-1"><small><strong>Branches:</strong> [[ d.eligible_branches ]]</small></p>
+                <p v-if="d.description" class="mb-2">
+                    <small>[[ d.description.substring(0, 150) ]][[ d.description.length > 150 ? '...' : '' ]]</small>
+                </p>
+
+                <!-- eligibility warning -->
+                <div v-if="!d.eligible" class="alert alert-warning py-1 px-2 mb-2">
+                    <small><i class="bi bi-exclamation-triangle"></i> Not eligible: [[ d.reasons.join(', ') ]]</small>
+                </div>
+
+                <div v-if="!d.already_applied">
+                    <button v-if="d.eligible" @click="apply(d.id)" class="btn btn-primary btn-sm">Apply Now</button>
+                    <button v-else class="btn btn-secondary btn-sm" disabled>Not Eligible</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p v-else class="text-muted">No open drives found.</p>
+
+    <!-- pagination -->
+    <nav v-if="pages > 1" class="mt-3">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" :class="{disabled: page <= 1}">
+                <a class="page-link" href="#" @click.prevent="changePage(page - 1)">Prev</a>
+            </li>
+            <li v-for="p in pages" :key="p" class="page-item" :class="{active: p === page}">
+                <a class="page-link" href="#" @click.prevent="changePage(p)">[[ p ]]</a>
+            </li>
+            <li class="page-item" :class="{disabled: page >= pages}">
+                <a class="page-link" href="#" @click.prevent="changePage(page + 1)">Next</a>
+            </li>
+        </ul>
+        <p class="text-center text-muted"><small>Total: [[ total ]] drives</small></p>
+    </nav>
+</div>
+{% endblock %}
+
+{%- block scripts %}
+<script src="/frontend/components/StudentDrives.js"></script>
+{%- endblock %}

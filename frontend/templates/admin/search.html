@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+{% block content %}
+<div id="app">
+    <h2><i class="bi bi-search"></i> Search</h2>
+
+    <div class="row g-2 mb-4">
+        <div class="col-md-5">
+            <input v-model="query" type="text" class="form-control" placeholder="Search..." @keyup.enter="search">
+        </div>
+        <div class="col-md-3">
+            <select v-model="searchType" class="form-select">
+                <option value="student">Students</option>
+                <option value="company">Companies</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button @click="search" class="btn btn-primary w-100">Search</button>
+        </div>
+    </div>
+
+    <!-- student results -->
+    <div v-if="results.students && results.students.length">
+        <h5>Students matching "[[ query ]]"</h5>
+        <table class="table">
+            <thead><tr><th>ID</th><th>Name</th><th>Roll No</th><th>Branch</th><th>CGPA</th><th>Email</th><th>Blacklisted</th></tr></thead>
+            <tbody>
+                <tr v-for="s in results.students" :key="s.id">
+                    <td>[[ s.id ]]</td><td>[[ s.name ]]</td><td>[[ s.roll_no ]]</td>
+                    <td>[[ s.branch || '-' ]]</td><td>[[ s.cgpa || '-' ]]</td>
+                    <td>[[ s.email ]]</td><td>[[ s.is_blacklisted ? 'Yes' : 'No' ]]</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- company results -->
+    <div v-if="results.companies && results.companies.length">
+        <h5>Companies matching "[[ query ]]"</h5>
+        <table class="table">
+            <thead><tr><th>ID</th><th>Name</th><th>Industry</th><th>HR</th><th>Status</th><th>Blacklisted</th></tr></thead>
+            <tbody>
+                <tr v-for="c in results.companies" :key="c.id">
+                    <td>[[ c.id ]]</td><td>[[ c.name ]]</td><td>[[ c.industry || '-' ]]</td>
+                    <td>[[ c.hr_name || '-' ]]</td><td>[[ c.status ]]</td>
+                    <td>[[ c.is_blacklisted ? 'Yes' : 'No' ]]</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p v-if="searched && !results.students?.length && !results.companies?.length" class="text-muted">
+        No results found.
+    </p>
+</div>
+{% endblock %}
+
+{%- block scripts %}
+<script src="/frontend/components/AdminSearch.js"></script>
+{%- endblock %}

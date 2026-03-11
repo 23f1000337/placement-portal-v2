@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Manage Students{% endblock %}
+{% block content %}
+<div id="app">
+    <h2><i class="bi bi-people"></i> Manage Students</h2>
+
+    <div v-if="loading" class="text-center py-4">
+        <div class="spinner-border text-primary"></div>
+    </div>
+
+    <table v-else-if="students.length" class="table table-hover">
+        <thead>
+            <tr>
+                <th>ID</th><th>Name</th><th>Roll No</th><th>Branch</th>
+                <th>Year</th><th>CGPA</th><th>Email</th><th>Blacklisted</th>
+                <th>Resume</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="s in students" :key="s.id">
+                <td>[[ s.id ]]</td>
+                <td>[[ s.name ]]</td>
+                <td>[[ s.roll_no ]]</td>
+                <td>[[ s.branch || '-' ]]</td>
+                <td>[[ s.year || '-' ]]</td>
+                <td>[[ s.cgpa || '-' ]]</td>
+                <td>[[ s.email ]]</td>
+                <td>[[ s.is_blacklisted ? 'Yes' : 'No' ]]</td>
+                <td>
+                    <a v-if="s.resume" :href="'/uploads/' + s.resume" target="_blank">View</a>
+                    <span v-else>-</span>
+                </td>
+                <td>
+                    <button @click="viewStudent(s.id)" class="btn btn-sm btn-info me-1"><i class="bi bi-eye"></i> View</button>
+                    <button @click="toggleBlacklist(s.id)" class="btn btn-sm btn-warning">
+                        [[ s.is_blacklisted ? 'Unblacklist' : 'Blacklist' ]]
+                    </button>
+                    <button @click="deleteStudent(s.id)" class="btn btn-sm btn-outline-danger">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p v-else class="text-muted">No students registered yet.</p>
+
+    <!-- pagination -->
+    <nav v-if="pages > 1" class="mt-3">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" :class="{disabled: page <= 1}">
+                <a class="page-link" href="#" @click.prevent="changePage(page - 1)">Prev</a>
+            </li>
+            <li v-for="p in pages" :key="p" class="page-item" :class="{active: p === page}">
+                <a class="page-link" href="#" @click.prevent="changePage(p)">[[ p ]]</a>
+            </li>
+            <li class="page-item" :class="{disabled: page >= pages}">
+                <a class="page-link" href="#" @click.prevent="changePage(page + 1)">Next</a>
+            </li>
+        </ul>
+        <p class="text-center text-muted"><small>Total: [[ total ]] students</small></p>
+    </nav>
+
+    <!-- Student Detail Modal -->
+    <div v-if="showModal" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.5)" @click.self="showModal=false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-person"></i> [[ detail.name ]]</h5>
+                    <button type="button" class="btn-close" @click="showModal=false"></button>
+                </div>
+                <div class="modal-body" v-if="detail">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Roll No:</strong> [[ detail.roll_no ]]</p>
+                            <p><strong>Branch:</strong> [[ detail.branch || '-' ]]</p>
+                            <p><strong>Year:</strong> [[ detail.year || '-' ]]</p>
+                            <p><strong>CGPA:</strong> [[ detail.cgpa || '-' ]]</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Email:</strong> [[ detail.email ]]</p>
+                            <p><strong>Phone:</strong> [[ detail.phone || '-' ]]</p>
+                            <p><strong>Skills:</strong> [[ detail.skills || '-' ]]</p>
+                            <p><strong>About:</strong> [[ detail.about || '-' ]]</p>
+                            <p><strong>Experience:</strong> [[ detail.experience || '-' ]]</p>
+                        </div>
+                    </div>
+                    <p v-if="detail.resume"><strong>Resume:</strong> <a :href="'/uploads/' + detail.resume" target="_blank">Download</a></p>
+                    <hr>
+                    <h6>Application History ([[ detailApps.length ]])</h6>
+                    <table v-if="detailApps.length" class="table table-sm">
+                        <thead><tr><th>Drive</th><th>Company</th><th>Applied</th><th>Interview</th><th>Status</th><th>Notes</th></tr></thead>
+                        <tbody>
+                            <tr v-for="a in detailApps" :key="a.id">
+                                <td>[[ a.drive ]]</td><td>[[ a.company ]]</td>
+                                <td>[[ a.applied_on ]]</td><td>[[ a.interview_date || '-' ]]</td>
+                                <td><span :class="'badge bg-' + statusColor(a.status)">[[ a.status ]]</span></td>
+                                <td>[[ a.notes || '-' ]]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p v-else class="text-muted">No applications yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{%- block scripts %}
+<script src="/frontend/components/AdminStudents.js"></script>
+{%- endblock %}

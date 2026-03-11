@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+{% block content %}
+<div id="app">
+    <div v-if="loading" class="text-center py-5">
+        <div class="spinner-border text-primary"></div>
+    </div>
+
+    <div v-else>
+        <h2><i class="bi bi-person"></i> Welcome, [[ info.student.name ]]</h2>
+        <p class="text-muted">Student dashboard</p>
+
+        <!-- stats -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3 col-6">
+                <div class="card text-center p-3 bg-primary text-white">
+                    <h3>[[ info.open_drives ]]</h3>
+                    <small>Open Drives</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="card text-center p-3 bg-success text-white">
+                    <h3>[[ info.my_apps ]]</h3>
+                    <small>My Applications</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="card text-center p-3 bg-info text-white">
+                    <h3>[[ info.student.branch || 'N/A' ]]</h3>
+                    <small>Branch</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="card text-center p-3 bg-warning">
+                    <h3>[[ info.student.cgpa || 'N/A' ]]</h3>
+                    <small>CGPA</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- quick links -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3"><a href="{{ url_for('student.browse_drives') }}" class="btn btn-outline-primary w-100">Browse Drives</a></div>
+            <div class="col-md-3"><a href="{{ url_for('student.my_applications') }}" class="btn btn-outline-success w-100">My Applications</a></div>
+            <div class="col-md-3"><a href="{{ url_for('student.student_profile') }}" class="btn btn-outline-info w-100">Edit Profile</a></div>
+            <div class="col-md-3"><a href="{{ url_for('student.placement_history') }}" class="btn btn-outline-dark w-100">Placement History</a></div>
+        </div>
+
+        <div v-if="!info.student.resume" class="alert alert-warning">
+            <strong>Tip:</strong> Upload your resume in <a href="{{ url_for('student.student_profile') }}">Profile</a> to apply for drives.
+        </div>
+
+        <div v-if="info.selected > 0" class="alert alert-success">
+            <strong>Congratulations!</strong> You have been selected in [[ info.selected ]] placement drive(s)!
+        </div>
+
+        <!-- Upcoming Interviews -->
+        <div v-if="info.interviews && info.interviews.length" class="mb-4">
+            <h4><i class="bi bi-calendar-event"></i> Upcoming Interviews</h4>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Company</th><th>Drive</th><th>Location</th><th>Interview Date</th><th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="iv in info.interviews" :key="iv.id">
+                            <td>[[ iv.company ]]</td>
+                            <td>[[ iv.drive ]]</td>
+                            <td>[[ iv.location || '-' ]]</td>
+                            <td><span class="badge bg-primary">[[ iv.interview_date ]]</span></td>
+                            <td>[[ iv.notes || '-' ]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{%- block scripts %}
+<script src="/frontend/components/StudentDashboard.js"></script>
+{%- endblock %}

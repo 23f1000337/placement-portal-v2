@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}My Applications{% endblock %}
+{% block content %}
+<div id="app">
+    <h2><i class="bi bi-file-earmark-text"></i> My Applications</h2>
+
+    <!-- export CSV button -->
+    <div class="mb-3">
+        <button @click="exportCSV" class="btn btn-outline-success btn-sm" :disabled="exporting">
+            <i class="bi bi-download"></i> [[ exporting ? 'Exporting...' : 'Export as CSV' ]]
+        </button>
+        <span v-if="exportMsg" class="ms-2 text-success"><i class="bi bi-check-circle"></i> [[ exportMsg ]]</span>
+        <a v-if="exportFile" :href="'/uploads/' + exportFile" class="btn btn-sm btn-success ms-2" download>
+            <i class="bi bi-file-earmark-arrow-down"></i> Download CSV
+        </a>
+    </div>
+
+    <div v-if="loading" class="text-center py-4">
+        <div class="spinner-border text-primary"></div>
+    </div>
+
+    <table v-else-if="apps.length" class="table table-hover">
+        <thead>
+            <tr>
+                <th>Drive</th><th>Company</th><th>Location</th>
+                <th>Salary</th><th>Applied On</th><th>Interview</th><th>Status</th><th>Feedback</th><th>Download</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="a in apps" :key="a.id">
+                <td>[[ a.drive ]]</td>
+                <td>[[ a.company ]]</td>
+                <td>[[ a.location || '-' ]]</td>
+                <td>[[ a.salary || '-' ]]</td>
+                <td>[[ a.applied_on ]]</td>
+                <td>[[ a.interview_date || '-' ]]</td>
+                <td>
+                    <span :class="'badge bg-' + statusColor(a.status)">[[ a.status ]]</span>
+                </td>
+                <td>[[ a.notes || '-' ]]</td>
+                <td>
+                    <a v-if="a.status == 'selected' || a.status == 'placed'" :href="'/api/student/offer-letter/' + a.id" class="btn btn-sm btn-outline-success" download>
+                        <i class="bi bi-file-earmark-arrow-down"></i> [[ a.status == 'placed' ? 'Confirmation' : 'Offer Letter' ]]
+                    </a>
+                    <span v-else>-</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p v-else class="text-muted">You haven't applied to any drives yet. <a href="{{ url_for('student.browse_drives') }}">Browse drives</a></p>
+</div>
+{% endblock %}
+
+{%- block scripts %}
+<script src="/frontend/components/StudentApplications.js"></script>
+{%- endblock %}

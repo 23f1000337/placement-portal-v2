@@ -1,0 +1,38 @@
+<html>
+<body style="font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5;">
+    <div style="max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 8px;">
+        <h2 style="color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px;">
+            Monthly Placement Report — {{ month_year }}
+        </h2>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <tr style="background: #007bff; color: white;">
+                <th style="padding: 10px; text-align: left;">Metric</th>
+                <th style="padding: 10px; text-align: right;">Count</th>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">Drives Conducted</td>
+                <td style="padding: 10px; text-align: right; font-weight: bold;">{{ drives_count }}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">Applications Received</td>
+                <td style="padding: 10px; text-align: right; font-weight: bold;">{{ apps_count }}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">Students Selected</td>
+                <td style="padding: 10px; text-align: right; font-weight: bold;">{{ selected_count }}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">Total Students</td>
+                <td style="padding: 10px; text-align: right; font-weight: bold;">{{ total_students }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;">Total Companies</td>
+                <td style="padding: 10px; text-align: right; font-weight: bold;">{{ total_companies }}</td>
+            </tr>
+        </table>
+        <p style="color: #666; margin-top: 20px; font-size: 0.9em;">
+            Report generated on {{ generated_at }}
+        </p>
+    </div>
+</body>
+</html>

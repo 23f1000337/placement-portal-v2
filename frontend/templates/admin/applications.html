@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}All Applications{% endblock %}
+{% block content %}
+<div id="app">
+    <h2><i class="bi bi-file-earmark-text"></i> Manage Applications</h2>
+
+    <!-- status filter -->
+    <div class="mb-3">
+        <button @click="filter='all'" :class="['btn btn-sm', filter=='all' ? 'btn-primary' : 'btn-outline-primary']">All</button>
+        <button @click="filter='applied'" :class="['btn btn-sm', filter=='applied' ? 'btn-info' : 'btn-outline-info']">Applied</button>
+        <button @click="filter='shortlisted'" :class="['btn btn-sm', filter=='shortlisted' ? 'btn-warning' : 'btn-outline-warning']">Shortlisted</button>
+        <button @click="filter='interview'" :class="['btn btn-sm', filter=='interview' ? 'btn-primary' : 'btn-outline-primary']">Interview</button>
+        <button @click="filter='selected'" :class="['btn btn-sm', filter=='selected' ? 'btn-success' : 'btn-outline-success']">Selected</button>
+        <button @click="filter='rejected'" :class="['btn btn-sm', filter=='rejected' ? 'btn-danger' : 'btn-outline-danger']">Rejected</button>
+        <button @click="filter='placed'" :class="['btn btn-sm', filter=='placed' ? 'btn-success' : 'btn-outline-success']">Placed</button>
+    </div>
+
+    <div v-if="loading" class="text-center py-4">
+        <div class="spinner-border text-primary"></div>
+    </div>
+
+    <table v-else-if="apps.length" class="table table-hover">
+        <thead>
+            <tr>
+                <th>ID</th><th>Student</th><th>Roll No</th>
+                <th>Drive</th><th>Company</th><th>Applied On</th>
+                <th>Interview</th><th>Status</th><th>Change Status</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="a in apps" :key="a.id">
+                <td>[[ a.id ]]</td>
+                <td>[[ a.student ]]</td>
+                <td>[[ a.roll_no ]]</td>
+                <td>[[ a.drive ]]</td>
+                <td>[[ a.company ]]</td>
+                <td>[[ a.applied_on ]]</td>
+                <td>[[ a.interview_date || '-' ]]</td>
+                <td>
+                    <span :class="'badge bg-' + statusColor(a.status)">[[ a.status ]]</span>
+                </td>
+                <td>
+                    <select class="form-select form-select-sm" :value="a.status" @change="updateStatus(a.id, $event.target.value)">
+                        <option value="applied">Applied</option>
+                        <option value="shortlisted">Shortlisted</option>
+                        <option value="interview">Interview</option>
+                        <option value="selected">Selected</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="placed">Placed</option>
+                    </select>
+                </td>
+                <td>
+                    <button @click="deleteApp(a.id)" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p v-else class="text-muted">No applications yet.</p>
+
+    <!-- pagination -->
+    <nav v-if="pages > 1" class="mt-3">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" :class="{disabled: page <= 1}">
+                <a class="page-link" href="#" @click.prevent="changePage(page - 1)">Prev</a>
+            </li>
+            <li v-for="p in pages" :key="p" class="page-item" :class="{active: p === page}">
+                <a class="page-link" href="#" @click.prevent="changePage(p)">[[ p ]]</a>
+            </li>
+            <li class="page-item" :class="{disabled: page >= pages}">
+                <a class="page-link" href="#" @click.prevent="changePage(page + 1)">Next</a>
+            </li>
+        </ul>
+        <p class="text-center text-muted"><small>Total: [[ total ]] applications</small></p>
+    </nav>
+</div>
+{% endblock %}
+
+{%- block scripts %}
+<script src="/frontend/components/AdminApplications.js"></script>
+{%- endblock %}

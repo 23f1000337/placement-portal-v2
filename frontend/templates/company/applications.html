@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Applications{% endblock %}
+{% block content %}
+<div id="app" data-drive-id="{{ drive_id }}">
+    <div v-if="loading" class="text-center py-4">
+        <div class="spinner-border text-primary"></div>
+    </div>
+
+    <div v-else>
+        <h2><i class="bi bi-file-earmark-text"></i> Applications for "[[ driveTitle ]]"</h2>
+        <p class="text-muted">Total: [[ apps.length ]] applications</p>
+        <a href="{{ url_for('company.company_dashboard') }}" class="btn btn-secondary btn-sm mb-3">&larr; Back to Dashboard</a>
+
+        <table v-if="apps.length" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th><th>Student</th><th>Roll No</th><th>Branch</th>
+                    <th>CGPA</th><th>Resume</th><th>Applied On</th><th>Status</th>
+                    <th>Interview</th><th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="a in apps" :key="a.id">
+                    <td>[[ a.id ]]</td>
+                    <td>
+                        <a href="#" @click.prevent="viewStudent(a.student_id)" class="text-decoration-none">[[ a.student_name ]]</a>
+                    </td>
+                    <td>[[ a.roll_no ]]</td>
+                    <td>[[ a.branch || '-' ]]</td>
+                    <td>[[ a.cgpa || '-' ]]</td>
+                    <td>
+                        <a v-if="a.resume" :href="'/uploads/' + a.resume" target="_blank">View</a>
+                        <span v-else>-</span>
+                    </td>
+                    <td>[[ a.applied_on ]]</td>
+                    <td>
+                        <span :class="'badge bg-' + statusColor(a.status)">[[ a.status ]]</span>
+                    </td>
+                    <td>
+                        <input v-model="a.interview_date" type="date" class="form-control form-control-sm mb-1" style="width: 140px">
+                    </td>
+                    <td>
+                        <select v-model="a.newStatus" class="form-select form-select-sm d-inline w-auto">
+                            <option value="applied">Applied</option>
+                            <option value="shortlisted">Shortlisted</option>
+                            <option value="interview">Interview</option>
+                            <option value="selected">Selected</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="placed">Placed</option>
+                        </select>
+                        <button @click="updateStatus(a)" class="btn btn-sm btn-primary mt-1">Update</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p v-else class="text-muted">No applications for this drive yet.</p>
+
+        <!-- Student Detail Modal -->
+        <div v-if="showModal" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.5)" @click.self="showModal=false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="bi bi-person"></i> [[ studentDetail.name ]]</h5>
+                        <button type="button" class="btn-close" @click="showModal=false"></button>
+                    </div>
+                    <div class="modal-body" v-if="studentDetail">
+                        <p><strong>Roll No:</strong> [[ studentDetail.roll_no ]]</p>
+                        <p><strong>Branch:</strong> [[ studentDetail.branch || '-' ]]</p>
+                        <p><strong>Year:</strong> [[ studentDetail.year || '-' ]]</p>
+                        <p><strong>CGPA:</strong> [[ studentDetail.cgpa || '-' ]]</p>
+                        <p><strong>Email:</strong> [[ studentDetail.email ]]</p>
+                        <p><strong>Phone:</strong> [[ studentDetail.phone || '-' ]]</p>
+                        <p><strong>Skills:</strong> [[ studentDetail.skills || '-' ]]</p>
+                        <p><strong>About:</strong> [[ studentDetail.about || '-' ]]</p>
+                        <p><strong>Experience:</strong> [[ studentDetail.experience || '-' ]]</p>
+                        <p v-if="studentDetail.resume"><strong>Resume:</strong> <a :href="'/uploads/' + studentDetail.resume" target="_blank">Download</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{%- block scripts %}
+<script src="/frontend/components/CompanyApplications.js"></script>
+{%- endblock %}

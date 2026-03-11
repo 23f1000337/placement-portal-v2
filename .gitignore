@@ -1,0 +1,20 @@
+# Virtual environment
+.venv/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Instance folder (SQLite DB)
+instance/
+
+# Environment variables
+.env
+
+# Generated exports
+uploads/*.csv
+
+# OS files
+Thumbs.db
+.DS_Store

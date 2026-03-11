@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Pending Approval{% endblock %}
+{% block content %}
+<div class="text-center mt-5">
+    <h2><i class="bi bi-hourglass-split"></i> Account Pending Approval</h2>
+    <p class="text-muted">Your company registration is under review by the admin.</p>
+    <p>Status: <span class="badge bg-warning">{{ status }}</span></p>
+    {% if status == 'rejected' %}
+    <div class="alert alert-danger">Your registration was rejected. Please contact admin for details.</div>
+    {% endif %}
+    <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary mt-3">Logout</a>
+</div>
+{% endblock %}

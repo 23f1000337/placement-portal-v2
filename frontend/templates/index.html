@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Home - Placement Portal{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+    <h1><i class="bi bi-mortarboard-fill text-primary"></i> Placement Portal</h1>
+    <p class="lead text-muted">Connecting students with companies for campus placements</p>
+    <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg me-2">
+        <i class="bi bi-box-arrow-in-right"></i> Login
+    </a>
+    <a href="{{ url_for('auth.register_student') }}" class="btn btn-outline-primary btn-lg">
+        <i class="bi bi-person-plus"></i> Register
+    </a>
+</div>
+
+<div class="row text-center mt-4 g-4">
+    <div class="col-md-4">
+        <div class="card p-4 h-100">
+            <h4><i class="bi bi-building text-success"></i> Companies</h4>
+            <p>Register, post placement drives and recruit top students.</p>
+            <a href="{{ url_for('auth.register_company') }}" class="btn btn-outline-success">Register as Company</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-4 h-100">
+            <h4><i class="bi bi-person text-primary"></i> Students</h4>
+            <p>Browse drives, apply for jobs and track your applications.</p>
+            <a href="{{ url_for('auth.register_student') }}" class="btn btn-outline-primary">Register as Student</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-4 h-100">
+            <h4><i class="bi bi-shield-lock text-danger"></i> Admin</h4>
+            <p>Manage companies, students and placement drives.</p>
+            <a href="{{ url_for('auth.login', role='admin') }}" class="btn btn-outline-danger">Admin Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
