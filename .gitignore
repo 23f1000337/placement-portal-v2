@@ -1,20 +1,23 @@
-# Virtual environment
+# Python
 .venv/
-
-# Python bytecode
 __pycache__/
 *.pyc
 *.pyo
 
-# Instance folder (SQLite DB)
+# Flask
 instance/
-
-# Environment variables
 .env
 
-# Generated exports
+# Vue
+node_modules/
+dist/
+
+# SQLite
+*.db
+
+# Redis cache
 uploads/*.csv
 
-# OS files
+# OS
 Thumbs.db
 .DS_Store

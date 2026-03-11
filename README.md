@@ -34,46 +34,11 @@ mad_2_project/
 │       ├── admin.py        # Admin API & pages
 │       ├── student.py      # Student API & pages
 │       └── company.py      # Company API & pages
-├── frontend/
-│   ├── components/         # Vue.js 3 components (17 files)
-│   ├── static/css/         # Stylesheets
-│   └── templates/          # Jinja2 HTML templates
-│       ├── base.html
-│       ├── admin/          # Admin dashboard pages
-│       ├── company/        # Company dashboard pages
-│       ├── student/        # Student dashboard pages
-│       └── email/          # Email notification templates
-├── uploads/                # Uploaded resumes & exported CSVs
-├── instance/               # SQLite database (auto-created)
-├── requirements.txt
-├── .env                    # Environment variables (SMTP config)
-└── .gitignore
-```
+# Placement Portal V2
 
-## Features
+A campus placement management system built with Flask, Vue.js, Celery, and Redis.
 
-### Roles
-- **Admin** — Manage students, companies, drives, and applications; view analytics
-- **Student** — Browse drives, apply, track applications, export CSV
-- **Company** — Create placement drives, review applications, export CSV
-
-### Backend Jobs (Celery)
-- **Daily Reminders** — Email students about upcoming drive deadlines (9 AM daily)
-- **Monthly Reports** — Placement summary reports sent to admin (1st of each month, 8 AM)
-- **CSV Export** — Async student/company data export via Celery tasks
-
-### API Caching (Redis)
-- 13 API endpoints cached with Redis (30–120s TTL)
-- Cache invalidation on data mutations (`cache.clear()`)
-- Automatic fallback to `SimpleCache` when Redis is unavailable
-
-## Setup
-
-### 1. Install Dependencies
-
-```bash
-python -m venv .venv
-.venv\Scripts\activate        # Windows
+This repository contains only the initial setup files for the project milestone.
 # source .venv/bin/activate   # Linux/Mac
 pip install -r requirements.txt
 pip install argon2-cffi requests
