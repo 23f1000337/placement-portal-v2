@@ -27,6 +27,7 @@ mad_2_project/
 │   ├── helpers.py          # Utility functions
 │   ├── models/
 │   │   └── __init__.py     # SQLAlchemy models (User, Student, Company, etc.)
+│   │   └── model.py
 │   └── routes/
 │       ├── auth.py         # Authentication routes
 │       ├── admin.py        # Admin API & pages
