@@ -126,10 +126,7 @@ def create_app():
             db.session.commit()
             print('[SEED] Admin created -> admin@placement.com / admin123')
 
-        # Seed test data if database is empty
-        if Student.query.count() == 0:
-            _seed_test_data()
-            print('[SEED] Test data added!')
+        
 
     # Import celery tasks so they get registered
     import backend.tasks  # noqa: F401
