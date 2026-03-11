@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-# placement-portal-v2
-=======
+
 # Placement Portal V2
 
 A full-stack campus placement management system built with Flask, Vue.js 3, Celery, and Redis.
